@@ -23,20 +23,17 @@ $tab_emp = all_emp_per_dep($id);
         <table border="1px" class="table">
             <thead class="table-dark">
                 <tr>
-                    <th>First name</th>
-                    <th>Last name</th>
+                    <th>Noms et prénoms</th>
                 </tr>
             </thead>
 
-            <?php foreach ($tab_emp as $emp) { ?>
-                <tr>
-                    <td><?php echo $emp["first_name"]; ?></td>
-                    <td><?php echo $emp["last_name"]; ?></td>
-                </tr>
-            <?php } ?>
+        <?php foreach ($tab_emp as $emp) { ?>
+        <tr>
+            <td><a href="employes_details.php?emp_no=<?php echo $emp["id"];?>"><?php echo $emp["first_name"]; ?> <?php echo $emp["last_name"]; ?></a></td>
+        </tr>
+        <?php } ?>
         </table>
     </div>
 
 </body>
-
 </html>

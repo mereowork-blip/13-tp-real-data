@@ -63,6 +63,7 @@ function depart_add()
 function all_emp_per_dep($dep)
 {
     $sql = "select 
+    employees.emp_no as id,
     employees.first_name as first_name,
     employees.last_name as last_name,
     departments.dept_name as departement
@@ -71,6 +72,19 @@ function all_emp_per_dep($dep)
     join employees on employees.emp_no = dept_emp.emp_no
     where dept_emp.dept_no ='$dep' LIMIT 10;";
     $new_req = mysqli_query(ConnectBd(), $sql);
+    $result = array();
+    while ($donnes = mysqli_fetch_assoc($new_req)) {
+        $result[] = $donnes;
+    }
+    mysqli_free_result($new_req);
+    return $result;
+}
+
+function get_emp_info ($no) {
+    $sql = "select
+    * from employees
+    where emp_no = '$no';";
+    $new_req = mysqli_query (ConnectBd(), $sql);
     $result = array();
     while ($donnes = mysqli_fetch_assoc($new_req)) {
         $result[] = $donnes;

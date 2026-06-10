@@ -1,5 +1,6 @@
 <?php include 'include/fonction.php';
-$departements = liste_departement();
+// $departements = liste_departement();
+$departements = depart_add();
 ?>
 
 <!DOCTYPE html>
@@ -16,19 +17,27 @@ $departements = liste_departement();
 </head>
 
 <body>
-    <table class="content-table table table-dark table-bordered">
-        <tr>
-            <th>Department Numero</th>
-            <th>Department Name</th>
-        </tr>
-        <?php foreach ($departements as $departement) { ?>
-            <tr>
+    <div class="container col-12 col-md-8">
+        <h1 class="text-center">Liste des departements</h1>
 
-                <td><?php echo $departement['dept_no'] ?></td>
-                <td><?php echo $departement['dept_name'] ?></td>
-            <?php } ?>
-            </tr>
+        <table class="table" border="1">
+            <thead class="table-dark">
+                <tr>
+                    <th>Department Numero</th>
+                    <th>Department Name</th>
+                    <th>Nom manager(s)</th>
+                </tr>
+            </thead>
+            <?php foreach ($departements as $departement) { ?>
+                <tr>
 
+                    <td><a href="employes.php?choix=<?php echo $departement['Department_no']; ?>"><?php echo $departement['Department_no'] ?></td>
+                    <td><?php echo $departement['Departement_name'] ?></td>
+                    <td><?php echo $departement['Manager_name'] ?></td>
+                <?php } ?>
+                </tr>
+        </table>
+    </div>
 </body>
 
 </html>

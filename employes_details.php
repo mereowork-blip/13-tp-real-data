@@ -2,6 +2,8 @@
 include("include/fonction.php");
 $id = $_GET['emp_no'];
 $emp_info = get_emp_info($id);
+$emp_salary = get_emp_salary($id);
+$emp_job = get_emp_job($id);
 $H = "Homme";
 $F = "Femme";
 ?>
@@ -34,18 +36,61 @@ $F = "Femme";
                 </tr>
             </thead>
 
-        <?php foreach ($emp_info as $info) { ?>
-        <tr>
-            <td><?php echo $info["emp_no"]; ?></td>
-            <td><?php echo $info["birth_date"]; ?></td>
-            <td><?php echo $info["first_name"]; ?></td>
-            <td><?php echo $info["last_name"]; ?></td>
-            <td><?php if ($info["gender"] == "M") { echo $H; } elseif ($info["gender"] == "F") { echo $F ;}; ?></td>
-            <td><?php echo $info["hire_date"]; ?></td>
-        </tr>
-        <?php } ?>
+            <?php foreach ($emp_info as $info) { ?>
+                <tr>
+                    <td><?php echo $info["emp_no"]; ?></td>
+                    <td><?php echo $info["birth_date"]; ?></td>
+                    <td><?php echo $info["first_name"]; ?></td>
+                    <td><?php echo $info["last_name"]; ?></td>
+                    <td><?php if ($info["gender"] == "M") {
+                            echo $H;
+                        } elseif ($info["gender"] == "F") {
+                            echo $F;
+                        }; ?></td>
+                    <td><?php echo $info["hire_date"]; ?></td>
+                </tr>
+            <?php } ?>
         </table>
+
+        <h1> Historique de son salaire</h1>
+        <table border="1px" class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Salaire</th>
+                    <th>Depuis le</th>
+                    <th>Jusqu'au</th>
+                </tr>
+            </thead>
+
+            <?php foreach ($emp_salary as $sal) { ?>
+                <tr>
+                    <td><?php echo $sal["salary"]; ?></td>
+                    <td><?php echo $sal["from_date"]; ?></td>
+                    <td><?php echo $sal["to_date"]; ?></td>
+                <?php } ?>
+        </table>
+
+        
+        <h1> Historique de sa carrière</h1>
+        <table border="1px" class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Emploie</th>
+                    <th>Depuis le</th>
+                    <th>Jusqu'au</th>
+                </tr>
+            </thead>
+
+            <?php foreach ($emp_job as $job) { ?>
+                <tr>
+                    <td><?php echo $job["title"]; ?></td>
+                    <td><?php echo $job["from_date"]; ?></td>
+                    <td><?php echo $job["to_date"]; ?></td>
+                <?php } ?>
+        </table>
+
     </div>
 
 </body>
+
 </html>

@@ -92,3 +92,29 @@ function get_emp_info ($no) {
     mysqli_free_result($new_req);
     return $result;
 }
+
+function get_emp_job ($no) {
+    $sql = "select
+    * from titles
+    where emp_no = '$no';";
+    $new_req = mysqli_query (ConnectBd(), $sql);
+    $result = array();
+    while ($donnes = mysqli_fetch_assoc($new_req)) {
+        $result[] = $donnes;
+    }
+    mysqli_free_result($new_req);
+    return $result; 
+}
+
+function get_emp_salary ($no) {
+    $sql = "select
+    * from salaries
+    where emp_no = '$no';";
+    $new_req = mysqli_query (ConnectBd(), $sql);
+    $result = array();
+    while ($donnes = mysqli_fetch_assoc($new_req)) {
+        $result[] = $donnes;
+    }
+    mysqli_free_result($new_req);
+    return $result; 
+}

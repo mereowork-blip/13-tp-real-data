@@ -118,3 +118,74 @@ function get_emp_salary ($no) {
     mysqli_free_result($new_req);
     return $result; 
 }
+function get_info_by($dep, $name, $min, $max) {
+    
+    // Vérifier qu'au moins un paramètre est rempli
+    if (empty($dep) && empty($name) && empty($min) && empty($max)) {
+        return "Erreur, Veuillez entrer des données";
+    }
+    
+    // Construction dynamique des conditions WHERE sans implode
+    $where = "";
+    $firstCondition = true;
+    
+    if (!empty($dep)) {
+        if (!$firstCondition) {
+            $where .= " and ";
+        }
+        $where .= "departments.dept_no = '$dep'";
+        $firstCondition = false;
+    }
+    
+    if (!empty($name)) {
+        if (!$firstCondition) {
+            $where .= " and ";
+        }
+        $where .= "employees.last_name like '%$name%'";
+        $firstCondition = false;
+    }
+    
+    if (!empty($min)) {
+        if (!$firstCondition) {
+            $where .= " and ";
+        }
+        $where .= "year(employees.birth_date) >= '$min'";
+        $firstCondition = false;
+    }
+    
+    if (!empty($max)) {
+        if (!$firstCondition) {
+            $where .= " and ";
+        }
+        $where .= "year(employees.birth_date) <= '$max'";
+        $firstCondition = false;
+    }
+    
+    // Assemblage de la requête complète
+    $sql = "select
+        employees.emp_no,
+        employees.birth_date,
+        employees.first_name,
+        employees.last_name,
+        employees.gender,
+        employees.hire_date,
+        departments.dept_name
+    from employees
+    join dept_emp on dept_emp.emp_no = employees.emp_no
+    join departments on departments.dept_no = dept_emp.dept_no";
+    
+    if (!empty($where)) {
+        $sql .= " where " . $where;
+    }
+    
+    $sql .= ";";
+    
+    // Exécution
+    $new_req = mysqli_query(ConnectBd(), $sql);
+    $result = array();
+    while ($donnes = mysqli_fetch_assoc($new_req)) {
+        $result[] = $donnes;
+    }
+    mysqli_free_result($new_req);
+    return $result;
+}

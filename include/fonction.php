@@ -121,9 +121,9 @@ function get_emp_salary ($no) {
 function get_info_by($dep, $name, $min, $max) {
     
     // Vérifier qu'au moins un paramètre est rempli
-    if (empty($dep) && empty($name) && empty($min) && empty($max)) {
-        return "Erreur, Veuillez entrer des données";
-    }
+    // if (empty($dep) && empty($name) && empty($min) && empty($max)) {
+    //     return "Erreur, Veuillez entrer des données";
+    // }
     
     // Construction dynamique des conditions WHERE sans implode
     $where = "";

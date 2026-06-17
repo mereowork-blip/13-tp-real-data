@@ -110,6 +110,8 @@ $F = "Femme";
 
     </div>
 
+    <div class="btn-modif" style="background-color: black; color: white;"><a href="modif_dept.php?emp_no=<?php echo $id;?>">Changer de departement</a></div>
+
 </body>
 
 </html>

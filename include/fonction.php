@@ -234,3 +234,14 @@ function emploi_long($no)
     $result = get_all_lines($sql);
     return $result;
 }
+
+function modif_dept ($id , $id_dept , $date_deb){
+    
+    $sql="UPDATE dept_emp
+    SET dept_no='$id_dept' , from_date = '$date_deb' 
+    WHERE emp_no = '$id' ;";
+
+    $query = mysqli_query(ConnectBd(), $sql);
+    mysqli_fetch_assoc($query);
+    mysqli_free_result($query);
+}

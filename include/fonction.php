@@ -235,13 +235,28 @@ function emploi_long($no)
     return $result;
 }
 
-function modif_dept ($id , $id_dept , $date_deb){
-    
-    $sql="UPDATE dept_emp
-    SET dept_no='$id_dept' , from_date = '$date_deb' 
-    WHERE emp_no = '$id' ;";
+function modif_dept($id, $id_dept, $date_deb) {
+    $sql = "UPDATE dept_emp
+    SET dept_no='$id_dept', from_date='$date_deb'
+    WHERE emp_no='$id';";
 
-    $query = mysqli_query(ConnectBd(), $sql);
-    mysqli_fetch_assoc($query);
-    mysqli_free_result($query);
+    mysqli_query(ConnectBd(), $sql);
+}
+
+function dep_emp_info($no)
+{
+    $sql = "SELECT
+    dept_emp.dept_no,
+    departments.dept_name as Nom_du_departement,
+    from_date as date_de_debut
+    from dept_emp
+    join departments on departments.dept_no = dept_emp.dept_no
+    where dept_emp.emp_no = '$no';";
+    $new_req = mysqli_query(ConnectBd(), $sql);
+    $result = array();
+    while ($donnes = mysqli_fetch_assoc($new_req)) {
+        $result[] = $donnes;
+    }
+    mysqli_free_result($new_req);
+    return $result;
 }

@@ -25,14 +25,15 @@ $departements = depart_add();
                 <tr>
                     <th>Department Numero</th>
                     <th>Department Name</th>
+                    <th>Nombre employé</th>
                     <th>Nom manager(s)</th>
                 </tr>
             </thead>
             <?php foreach ($departements as $departement) { ?>
                 <tr>
-
                     <td><a href="employes.php?choix=<?php echo $departement['Department_no']; ?>"><?php echo $departement['Department_no'] ?></td>
                     <td><?php echo $departement['Departement_name'] ?></td>
+                    <td><?php echo $departement['nb_employee'] ?></td>
                     <td><?php echo $departement['Manager_name'] ?></td>
                 <?php } ?>
                 </tr>

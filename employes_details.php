@@ -4,6 +4,7 @@ $id = $_GET['emp_no'];
 $emp_info = get_emp_info($id);
 $emp_salary = get_emp_salary($id);
 $emp_job = get_emp_job($id);
+$emp_job_long = emploi_long($id);
 $H = "Homme";
 $F = "Femme";
 ?>
@@ -82,6 +83,24 @@ $F = "Femme";
             </thead>
 
             <?php foreach ($emp_job as $job) { ?>
+                <tr>
+                    <td><?php echo $job["title"]; ?></td>
+                    <td><?php echo $job["from_date"]; ?></td>
+                    <td><?php echo $job["to_date"]; ?></td>
+                <?php } ?>
+        </table>
+
+        <h1> Emploi le plus durable</h1>
+        <table border="1px" class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Emploie</th>
+                    <th>Depuis le</th>
+                    <th>Jusqu'au</th>
+                </tr>
+            </thead>
+
+            <?php foreach ($emp_job_long as $job) { ?>
                 <tr>
                     <td><?php echo $job["title"]; ?></td>
                     <td><?php echo $job["from_date"]; ?></td>

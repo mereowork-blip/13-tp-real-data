@@ -42,11 +42,15 @@ function depart_add()
     $sql = "SELECT 
     departments.dept_no as Department_no,
     departments.dept_name as Departement_name,
-    employees.first_name as Manager_name
+    employees.first_name as Manager_name,
+    count(dept_emp.emp_no) as nb_employee
     from departments
     join dept_manager on dept_manager.dept_no = departments.dept_no
     join employees on employees.emp_no = dept_manager.emp_no
-    where dept_manager.to_date > '2000-01-01' order by employees.emp_no ASC;";
+    join dept_emp on dept_emp.dept_no = departments.dept_no
+    where dept_manager.to_date = '9999-01-01'
+    group by departments.dept_no, departments.dept_name, employees.first_name, employees.emp_no
+    order by employees.emp_no ASC;";
 
 
 
@@ -80,11 +84,12 @@ function all_emp_per_dep($dep)
     return $result;
 }
 
-function get_emp_info ($no) {
+function get_emp_info($no)
+{
     $sql = "select
     * from employees
     where emp_no = '$no';";
-    $new_req = mysqli_query (ConnectBd(), $sql);
+    $new_req = mysqli_query(ConnectBd(), $sql);
     $result = array();
     while ($donnes = mysqli_fetch_assoc($new_req)) {
         $result[] = $donnes;
@@ -93,42 +98,45 @@ function get_emp_info ($no) {
     return $result;
 }
 
-function get_emp_job ($no) {
+function get_emp_job($no)
+{
     $sql = "select
     * from titles
     where emp_no = '$no';";
-    $new_req = mysqli_query (ConnectBd(), $sql);
+    $new_req = mysqli_query(ConnectBd(), $sql);
     $result = array();
     while ($donnes = mysqli_fetch_assoc($new_req)) {
         $result[] = $donnes;
     }
     mysqli_free_result($new_req);
-    return $result; 
+    return $result;
 }
 
-function get_emp_salary ($no) {
+function get_emp_salary($no)
+{
     $sql = "select
     * from salaries
     where emp_no = '$no';";
-    $new_req = mysqli_query (ConnectBd(), $sql);
+    $new_req = mysqli_query(ConnectBd(), $sql);
     $result = array();
     while ($donnes = mysqli_fetch_assoc($new_req)) {
         $result[] = $donnes;
     }
     mysqli_free_result($new_req);
-    return $result; 
+    return $result;
 }
-function get_info_by($dep, $name, $min, $max) {
-    
+function get_info_by($dep, $name, $min, $max)
+{
+
     // Vérifier qu'au moins un paramètre est rempli
     // if (empty($dep) && empty($name) && empty($min) && empty($max)) {
     //     return "Erreur, Veuillez entrer des données";
     // }
-    
+
     // Construction dynamique des conditions WHERE sans implode
     $where = "";
     $firstCondition = true;
-    
+
     if (!empty($dep)) {
         if (!$firstCondition) {
             $where .= " and ";
@@ -136,7 +144,7 @@ function get_info_by($dep, $name, $min, $max) {
         $where .= "departments.dept_no = '$dep'";
         $firstCondition = false;
     }
-    
+
     if (!empty($name)) {
         if (!$firstCondition) {
             $where .= " and ";
@@ -144,7 +152,7 @@ function get_info_by($dep, $name, $min, $max) {
         $where .= "employees.last_name like '%$name%'";
         $firstCondition = false;
     }
-    
+
     if (!empty($min)) {
         if (!$firstCondition) {
             $where .= " and ";
@@ -152,7 +160,7 @@ function get_info_by($dep, $name, $min, $max) {
         $where .= "year(employees.birth_date) >= '$min'";
         $firstCondition = false;
     }
-    
+
     if (!empty($max)) {
         if (!$firstCondition) {
             $where .= " and ";
@@ -160,7 +168,7 @@ function get_info_by($dep, $name, $min, $max) {
         $where .= "year(employees.birth_date) <= '$max'";
         $firstCondition = false;
     }
-    
+
     // Assemblage de la requête complète
     $sql = "select
         employees.emp_no,
@@ -173,13 +181,13 @@ function get_info_by($dep, $name, $min, $max) {
     from employees
     join dept_emp on dept_emp.emp_no = employees.emp_no
     join departments on departments.dept_no = dept_emp.dept_no";
-    
+
     if (!empty($where)) {
         $sql .= " where " . $where;
     }
-    
+
     $sql .= ";";
-    
+
     // Exécution
     $new_req = mysqli_query(ConnectBd(), $sql);
     $result = array();
@@ -187,5 +195,42 @@ function get_info_by($dep, $name, $min, $max) {
         $result[] = $donnes;
     }
     mysqli_free_result($new_req);
+    return $result;
+}
+
+
+function emploi_add()
+{
+
+    $sql = "SELECT 
+    title as emploi,
+    sum(employees.gender = 'M') as nb_homme,
+    sum(employees.gender = 'F') as nb_femme,
+    avg(salaries.salary) as salaire_moyen
+    from titles
+    join employees on employees.emp_no = titles.emp_no
+    join salaries on salaries.emp_no = titles.emp_no
+    where salaries.to_date = '9999-01-01'
+    and titles.to_date = '9999-01-01'
+    group by titles.title
+    order by titles.title ASC;";
+
+    $result = get_all_lines($sql);
+    return $result;
+}
+
+function emploi_long($no)
+{
+
+    $sql = "SELECT 
+    title,
+    from_date,
+    to_date
+    from titles
+    where emp_no = '$no'
+    order by (year(to_date) - year(from_date)) desc
+    limit 1;";
+
+    $result = get_all_lines($sql);
     return $result;
 }
